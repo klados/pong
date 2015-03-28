@@ -1,0 +1,46 @@
+#welcome_msg{
+  text-align:center;
+}
+
+#infoMenu{
+  text-align:center;
+  font-size:25px;
+  /*background-color:blue;*/
+}
+
+#fps{
+  text-align:center;
+  color:red;
+  /*width:100px;
+  heigth:25px;*/
+}
+
+#r{
+  float:right;
+  margin-right:5%;
+  margin-bottom:10%;
+}
+
+#online_players{
+  text-align:left;
+}
+
+#h2{
+  color:red;
+}
+
+#players_list{
+  list-style-type:none;
+  background-color:#EEEEEE;
+}
+
+#canvas_tag{
+
+}
+
+#demoCanvas{
+  border-style: solid;
+  border-width: 1px;
+  background-color:#A0A0A4;
+  margin-left:10%;
+}

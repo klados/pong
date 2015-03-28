@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Pong Game</title>
+  <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://code.createjs.com/easeljs-0.8.0.min.js"></script>
+  <script src="https://code.createjs.com/tweenjs-0.6.0.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://snf-537850.vm.okeanos.grnet.gr/pong/pong.css">
+  <script src="http://snf-537850.vm.okeanos.grnet.gr/pong/pong.js"></script>
+</head>
+
+<body  onload=" main();" >
+
+  <div class="jumbotron">
+    <h1 id="welcome_msg">Keep Playing</h1>
+  </div>
+
+  <div class="row" id="infoMenu">
+    <div class="col-lg-1 col-md-1 col-sm-1" id="fps">fps:</div>
+    <div class="col-lg-3 col-md-3 col-sm-3" id="leftName" style="text-align:right"></div>
+    <div class="col-lg-2 col-md-2 col-sm-2" id="leftScore" style="text-align:left">0</div>
+    <div class="col-lg-3 col-md-3 col-sm-3" id="rightName" style="text-align:right"></div>
+    <div class="col-lg-2 col-md-2 col-sm-2" id="rightScore" style="text-align:left">0</div>
+    <div class="col-lg-1 col-md-1 col-sm-1"><button type="button" class="btn" onclick="muteSound();"><span class="glyphicon glyphicon-volume-off"></span></button></div>
+  </div><br>
+
+  <!-- <div id="r" >
+    <div id="online_players">
+      <h2 id="h2">online Players</h2>
+      <div id="players_list" class="list-group"></div>
+    </div>
+  </div> -->
+
+  <div class=row>
+    <div class="col-lg-5"></div>
+  <div class="col-lg-2">
+      <canvas id="demoCanvas" width="500" height="300">Your browser does not support canvas tag!</canvas>
+  </div>
+    <div class="col-lg-5"></div>
+  </div>
+
+  <div class="modal fade" id="myModal"> <!-- modal erea -->
+    <div class="modal-dialog modal-lg modal-md modal-sm">
+      <div class="modal-content">
+      <div class="modal-header">
+        <button class="close" type="button" data-dismiss="modal">&times;</button>
+        <h3 class="modal-title" id="error_message"></h3>
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <audio id="ball" controls autostart="false" hidden="true">
+    <source src="http://snf-537850.vm.okeanos.grnet.gr/pong/ball1.ogg" type="audio/ogg">
+      <source src="http://snf-537850.vm.okeanos.grnet.gr/pong/ball.wav" type="audio/wav">
+        Your browser does not support the audio tag.
+  </audio>
+
+</body>
+</html>

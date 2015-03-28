@@ -1,0 +1,25 @@
+{
+  "name": "Pong",
+  "version": "0.0.1",
+  "description": "online pong game",
+  "dependencies": {
+    "express ": "4.8.4",
+    "socket.io": "^1.0.6"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "main": "server.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "klados"
+  },
+  "keywords": [
+    "Pong",
+    "online",
+    "game"
+  ],
+  "author": "George Klados",
+  "license": "BSD"
+}

@@ -1,0 +1,34 @@
+#h2{
+  text-align:center;
+  /*color:red;*/
+}
+#online_players{
+  float:right;
+  text-align:left;
+  margin-right:10%;
+}
+ul,#players_list{
+  list-style-type:none;
+}
+#op{
+  color:red;
+  font-size:25px;
+}
+#container{
+  margin-top:5%;
+  /*margin-left:40%;*/
+}
+#set_name{/*input tag*/
+  width:300px;
+  /*display: inline;*/
+}
+#set_opponent_name{
+  width:300px;
+  /*display: inline;*/
+}
+#notifmsg{
+  text-align:center;
+}
+#notifmsg2{
+  text-align:center;
+}

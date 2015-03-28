@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+
+  <html>
+    <head>
+      <title>PongGame!</title>
+      <meta charset="utf-8">
+      <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+      <script src="/socket.io/socket.io.js"></script>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+      <link rel="stylesheet" href="http://snf-537850.vm.okeanos.grnet.gr/pong/lobby.css">
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    </head>
+
+      <script charset="utf-8">
+      $('#myModal').modal({ show: false}); //hide the modal
+      $('#confirmModal').modal({ show: false}); //hide the modal
+
+        var socket = io().connect('http://snf-537850.vm.okeanos.grnet.gr');
+        var myName;
+        var friendName;
+        var players_list = [];  //store the name of the players
+        var g_a;
+        //var socket_id_table = []; //store the socket id from each player (establish connection player with player)
+        //var conf_ans;
+//-----------------------
+        socket.on("players",function(table){// accept the table array and load it to the html
+           //console.log("received array: " + table);
+           players_list = table.slice(); //copy the temp array to the perm array
+
+           $('#players_list').empty(); //empty the old list
+            for(var i=0;i<table.length; i++) {
+              //$('#players_list').append("<li> </li>").text(table[i]); //add item to the list
+              //$('#players_list').append( $( "<li>",{}).text(table[i]) ); //add item to the list
+              $('#players_list').append( $( "<div class='list-group-item'>",{}).text(table[i]) ); //add item to the list
+            }//end of for
+
+        });
+
+
+        socket.on("play",function(a){//accept an offer to play, the arg is the name of the player that make the proposal
+          if(a.to == myName){ //if that proposal is from me
+            g_a = a;//copy to a global var
+            $("#conf_msg").html("Do you want to play with: "+ a.from);
+            $('#confirmModal').modal('show');
+
+              //var conf_ans = confirm("Do you want to play with "+ a.from);
+              //
+              // if(conf_ans==true){ //accept the proposal
+              //   socket.emit("play ans",{ans:true,to:a.from}); //send an accept message back
+              //   window.open("http://snf-537850.vm.okeanos.grnet.gr:9000/PongGame/" + myName+"-"+a.from,"_self");//load the game
+              // }
+              // else{ //sorry i will not play with you
+              //   socket.emit("play ans",{ans:false,to:a.from}); //send a refuse message
+              // }
+          }
+        });
+
+
+        socket.on("play ans",function(a){ //recieve the answer from the other player
+          if(a.to == myName){
+            if(a.ans == false){
+              $("#error_message").html("The other player does not want to play with you");
+              $('#myModal').modal('show');
+              $("#play_btn").attr("disabled", false);//enable the button
+            }
+            else{     //μπρορεί να υπάρξει πρόβλημα με το όνομα του φίλου, αν αλλάξει με κάποιον τρόπο....
+              window.open("http://snf-537850.vm.okeanos.grnet.gr:9000/PongGame/" + myName+"-"+friendName,"_self");//load the game
+            }
+          }
+        });
+
+        // πως δουλεύει το σύστημα με της προσκλήσεις
+        //   #player 1             #player2
+        // function btn_click --> socket.on("play")
+        //                         |    |->go to the next page (accept the invitation)
+        // socket.on("play ans") <-|    |->do nothing
+        //   |->do nothing (error)
+        //   |
+        //   |->load the next page(succes)
+
+//-------------------------
+        function accept_deny(ans){ //send an accept/deny message to the other player
+          if(ans == "true"){ //accept the proposal
+              socket.emit("play ans",{ans:true,to:g_a.from}); //send an accept message back
+              window.open("http://snf-537850.vm.okeanos.grnet.gr:9000/PongGame/" + myName+"-"+g_a.from,"_self");//load the game
+          }
+          else if(ans=="false"){ //sorry i will not play with you
+              socket.emit("play ans",{ans:false,to:g_a.from}); //send a refuse message
+          }
+        }
+
+        function play_click(){
+          if(myName != undefined){//if my name exists
+            friendName = $('#set_opponent_name').val(); //store the name of the player that you want to play with
+            var temp = players_list.indexOf(friendName);
+            if(temp > -1){ // the opponent name exists.
+              $("#play_btn").attr("disabled", true);
+              socket.emit("play",friendName);//send the name of the player that i want to play with
+            }
+            else{
+              $("#error_message").html("Sorry the name does not exists");
+              $('#myModal').modal('show');
+            }
+          }
+          else{
+            $("#error_message").html("Please give a name first!");
+            $('#myModal').modal('show');
+          }
+        }//end of function
+
+
+        function btn_click(){ //click the log in button
+          myName = $("#set_name").val();
+          if(myName!=undefined){
+            if(  players_list.indexOf(myName) < 0 ){ //the name not exists
+              socket.emit("username", myName);  //send the username to the server
+              $("#btn").attr("disabled", true);
+            }
+            else{
+              $("#error_message").html("You have to choose an other name");
+              $('#myModal').modal('show');
+            }
+          }
+          else{
+            $("#error_message").html("Give me a name please");
+            $('#myModal').modal('show');
+          }
+        }//end of function
+
+
+      </script>
+
+    <body>
+      <div class="navbar navbar-default">
+        <a class="navbar-brand" href="http://snf-537850.vm.okeanos.grnet.gr/">Home</a>
+        <a class="navbar-brand" href="#">Link to Github</a>
+
+      </div>
+
+      <br>
+      <div class="jumbotron"> <h2 id="h2">Lets play one of the most famous Game of all the history!!!</h2></div>
+
+      <div id="online_players">
+          <div  id="op">Online Players</div>
+          <!-- <ul id="players_list"></ul> -->
+          <div id="players_list" class="list-group"></div>
+      </div>
+
+      <div id="container" class="container">
+
+            <div class="form-group">
+              <label  for="set_name"  >Your name is:</label>
+              <input  id="set_name"  type="text" class="form-control" placeholder="Write your name" autocomplete='off'>
+              <button class="btn btn-primary"  type="button"  id="btn" onclick="btn_click()">Log in</button>
+            </div>
+
+            <div class="form-group">
+              <label for="set_opponent_name">Your opponent name is:</label>
+              <input id="set_opponent_name" type="text" class="form-control" placeholder="Write your's friend name" autocomplete='off'>
+              <button id="play_btn" class="btn btn-warning" type="btn" onclick="play_click()">Play</button>
+            </div>
+
+      </div>
+
+        <div class="modal fade" id="myModal"> <!-- modal erea -->
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+            <div class="modal-header">
+              <button class="close" type="button" data-dismiss="modal">&times;</button>
+              <h3 class="modal-title" id="error_message"></h3>
+            </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal fade" id="confirmModal"> <!-- modal erea -->
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+            <div class="modal-header">
+              <h3 class="modal-title" id="conf_msg"></h3>
+              <a class="btn btn-danger"  data-dismiss="modal" onclick="accept_deny('false');">Deny</a>
+              <a class="btn btn-success"  onclick="accept_deny('true');">Accept</a>
+            </div>
+            </div>
+          </div>
+        </div>
+
+        <div  class="container">
+          <div id="notifmsg">Your name is temporary stored and unique at the online players list.</div>
+          <div id="notifmsg2">Press ctrl + f5 to refress the page!</div>
+        </div>
+
+    </body>
+  </html>
