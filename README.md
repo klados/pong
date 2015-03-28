@@ -4,6 +4,10 @@ multiplayer pong, with node js ,socket.io ,canvas and bootstrap
 
 Play with yours friends online, one of most popular game of all the time.
 
+![Image](http://snf-537850.vm.okeanos.grnet.gr/photos/pong1.png)
+
+![Image](http://snf-537850.vm.okeanos.grnet.gr/photos/pong2.png)
+
 ### GPL License
 
   This program is free software: you can redistribute it and/or modify
