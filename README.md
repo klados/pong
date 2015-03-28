@@ -1,6 +1,6 @@
 # pong
 
-multiplayer pong
+multiplayer pong, with node js ,socket.io ,canvas and bootstrap
 
 Play with yours friends online, one of most popular game of all the time.
 
